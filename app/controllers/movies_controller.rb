@@ -18,7 +18,11 @@ class MoviesController < ApplicationController
 
     if session[:ratings] != nil and (@ratings == nil or @ratings.length == 0)
       @ratings = session[:ratings]
-      #redirect_to movies_path(session[:ratings])
+      @ratings_hash = {}
+      @ratings.each do |i, rating|
+        @ratings_hash[i] = rating
+      end
+      redirect_to movies_path(ratings: @ratings)
     end
 
 
