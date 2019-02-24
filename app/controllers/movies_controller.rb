@@ -10,8 +10,37 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
-  def index
-    @movies = Movie.all
+  def index 
+    @all_ratings = Movie.all_ratings
+    @chosen_ratings = @all_ratings
+    @ratings = params[:ratings]
+
+
+    if session[:ratings] != nil and (@ratings == nil or @ratings.length == 0)
+      @ratings = session[:ratings]
+      #redirect_to movies_path(session[:ratings])
+    end
+
+
+    if @ratings != nil
+      @chosen_ratings = @ratings.keys
+    end
+
+    session[:ratings] = @ratings
+
+    @sortby = params[:sortby]
+    if @sortby == nil
+      @sortby = session[:sortby]
+    end
+    if @sortby == "date"
+      @movies = Movie.with_ratings(@chosen_ratings).order('release_date ASC')
+      session[:sortby] = "date"
+    elsif @sortby == "title"
+      @movies = Movie.with_ratings(@chosen_ratings).order('title ASC')
+      session[:sortby] = "title"
+    else
+      @movies = Movie.with_ratings(@chosen_ratings)
+    end
   end
 
   def new
