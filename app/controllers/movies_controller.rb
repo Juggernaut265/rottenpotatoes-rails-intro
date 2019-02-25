@@ -37,11 +37,11 @@ class MoviesController < ApplicationController
       @sortby = session[:sortby]
     end
     if @sortby == "date"
-      @movies = Movie.with_ratings(@chosen_ratings).order('release_date ASC')
       session[:sortby] = "date"
+      @movies = Movie.with_ratings(@chosen_ratings).order('release_date ASC')
     elsif @sortby == "title"
-      @movies = Movie.with_ratings(@chosen_ratings).order('title ASC')
       session[:sortby] = "title"
+      @movies = Movie.with_ratings(@chosen_ratings).order('title ASC')
     else
       @movies = Movie.with_ratings(@chosen_ratings)
     end
